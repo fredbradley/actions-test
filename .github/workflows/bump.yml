@@ -13,7 +13,6 @@ jobs:
       - uses: fregante/release-with-changelog@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          #exclude: '^Meta'
           commit-template: '- {date} {title} ← {hash}'
           template: |
               ### Changelog
