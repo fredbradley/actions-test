@@ -56,7 +56,7 @@ jobs:
         with:
           tag: ${{ steps.tag_version.output.new_tag}}
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-template: '- {date} {title} ← {hash}'
+          commit-template: '- {title} ← {hash}'
           template: |
               ### Changelog
 
@@ -65,3 +65,7 @@ jobs:
               Compare: {range}
 
               ❤
+      - name: Changelog Tool
+        uses: rcmachado/changelog-action@v1
+        with:
+          args: fmt
