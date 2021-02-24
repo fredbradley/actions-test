@@ -1,8 +1,3 @@
 # Actions test
 
-this is my playground for Actions.
-
-Here is a feature! haha
-
-
-Update Readme
+Bit of a tidy Up
