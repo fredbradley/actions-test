@@ -6,21 +6,22 @@ on:
       - master
 
 jobs:
-  release:
-    #if: startsWith(github.ref, 'refs/tags/')
+  Release:
     runs-on: ubuntu-latest
     steps:
-      - name: Build Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Release
-        uses: actions/create-release@v1
+      - uses: actions/checkout@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          body: ${{steps.github_release.outputs.changelog}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 50
+      - uses: fregante/release-with-changelog@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          exclude: '^Meta'
+          commit-template: '- {title} ← {hash}'
+          template: |
+              ### Changelog
+
+              {commits}
+
+              {range}
+
+              ❤
