@@ -1,12 +1,7 @@
 name: Version Module 2
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/gitversion.yml
   push:
-    paths:
-      - .github/workflows/gitversion.yml
     branches:
       - master
 
