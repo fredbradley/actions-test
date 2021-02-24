@@ -57,7 +57,7 @@ jobs:
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-template: '- {title} ← {hash}'
+          commit-template: '- {date} {title} ← {hash}'
           template: |
               ### Changelog
               {commits}
