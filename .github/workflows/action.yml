@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: oprypin/find-latest-tag@v1
+        id: octokit  # The step ID to refer to later.
         with:
           repository: fredbradley/actions-test  # The repository to scan.
-          id: octokit  # The step ID to refer to later.
 
       - name: Checkout main branch to calculate changelog
         uses: actions/checkout@v2
