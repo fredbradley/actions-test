@@ -6,63 +6,21 @@ on:
       - master
 
 jobs:
-  test:
-    runs-on: ubuntu-18.04
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
     steps:
-      # To use this repository's private action, you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Create Tag
-        id: create_tag
-        uses: jaywcjlove/create-tag-action@v1.1.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # test: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
-          package-path: ./package.json
-
-      - name: Generate Changelog
-        id: changelog
-        uses: jaywcjlove/changelog-generator@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          head-ref: ${{steps.create_tag.outputs.version}}
-          #filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
-          #filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
-
-      - name: Get the tag name
-        run: echo "${{ steps.changelog.outputs.tag }}"
-
-      - name: Get the branch name
-        run: echo "${{ steps.changelog.outputs.branch }}"
-
-      - name: Get comparing changes url.
-        run: echo "${{ steps.changelog.outputs.compareurl }}"
-
-      - name: The version number of the tag created.
-        run: echo "${{ steps.changelog.outputs.version }}"
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
-        # if: startsWith(github.ref, 'refs/tags/')
-        if: steps.create_tag.outputs.successful
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: actions/create-release@v1
         with:
-          tag_name: ${{ steps.create_tag.outputs.version }}
-          release_name: ${{ steps.create_tag.outputs.version }}
-          body: |
-            ```yml
-            - name: Generate changelog
-              id: changelog
-              uses: jaywcjlove/changelog-generator@${{ steps.create_tag.outputs.version }}
-              with:
-                token: # Your GITHUB_TOKEN
-                filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
-                filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
-            ```
-            ${{ steps.changelog.outputs.compareurl }}
-            ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{steps.github_release.outputs.changelog}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
