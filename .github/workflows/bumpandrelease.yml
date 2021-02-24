@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - master
-
+  pull_request:
+    branches:
+      - master
 jobs:
   build:
     name: Create Release
@@ -57,7 +59,7 @@ jobs:
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-template: '- {date} {title} ← {hash}'
+          commit-template: '- {date}: {title} ← {hash}'
           template: |
               ### Changelog
               {commits}
