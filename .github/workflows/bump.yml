@@ -1,31 +1,25 @@
-name: "Bump Version"
+name: Bump version
 
 on:
   push:
     branches:
-      - "master"
+      - master
 
 jobs:
-  bump-version:
-    name: "Bump Version on master"
+  bump_version:
+    if: "!startsWith(github.event.head_commit.message, 'bump:')"
     runs-on: ubuntu-latest
-
+    name: "Bump version and create changelog with commitizen"
     steps:
-      - name: "Checkout source code"
-        uses: "actions/checkout@v2"
+      - name: Check out
+        uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
-      - name: "cat package.json"
-        run: cat ./package.json
-      - name: "Setup Node.js"
-        uses: "actions/setup-node@v1"
+          fetch-depth: 0
+          token: "${{ secrets.GITHUB_TOKEN }}"
+      - id: get_version
+        name: Create bump and changelog
+        uses: Sha-code/standard-version_action@1.0.8
         with:
-          node-version: 12
-      - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
-        with:
-          tag-prefix: ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: "cat package.json"
-        run: cat ./package.json
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo ${{ steps.get_version.outputs.version }}
+      - run: echo ${{ steps.get_version.outputs.type }}
