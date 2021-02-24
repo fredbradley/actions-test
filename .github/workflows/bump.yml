@@ -6,24 +6,63 @@ on:
       - master
 
 jobs:
-  bump_version:
-    if: "!startsWith(github.event.head_commit.message, 'bump:')"
-    runs-on: ubuntu-latest
-    name: "Bump version and create changelog with commitizen"
+  test:
+    runs-on: ubuntu-18.04
     steps:
-      - name: Check out
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Create Tag
+        id: create_tag
+        uses: jaywcjlove/create-tag-action@v1.1.0
         with:
-          fetch-depth: 0
-          token: "${{ secrets.GITHUB_TOKEN }}"
-      - id: get_version
-        name: Create bump and changelog
-        uses: Sha-code/standard-version_action@1.0.8
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # test: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+          package-path: ./package.json
+
+      - name: Generate Changelog
+        id: changelog
+        uses: jaywcjlove/changelog-generator@main
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - run: echo ${{ steps.get_version.outputs.version }}
-      - run: echo ${{ steps.get_version.outputs.type }}
-      - name: Changelog Tool
-        uses: rcmachado/changelog-action@v1
+          token: ${{ secrets.GITHUB_TOKEN }}
+          head-ref: ${{steps.create_tag.outputs.version}}
+          #filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
+          #filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+
+      - name: Get the tag name
+        run: echo "${{ steps.changelog.outputs.tag }}"
+
+      - name: Get the branch name
+        run: echo "${{ steps.changelog.outputs.branch }}"
+
+      - name: Get comparing changes url.
+        run: echo "${{ steps.changelog.outputs.compareurl }}"
+
+      - name: The version number of the tag created.
+        run: echo "${{ steps.changelog.outputs.version }}"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        # if: startsWith(github.ref, 'refs/tags/')
+        if: steps.create_tag.outputs.successful
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: fmt
+          tag_name: ${{ steps.create_tag.outputs.version }}
+          release_name: ${{ steps.create_tag.outputs.version }}
+          body: |
+            ```yml
+            - name: Generate changelog
+              id: changelog
+              uses: jaywcjlove/changelog-generator@${{ steps.create_tag.outputs.version }}
+              with:
+                token: # Your GITHUB_TOKEN
+                filter-author: (jaywcjlove|小弟调调™|dependabot\[bot\]|Renovate Bot)
+                filter: '[R|r]elease[d]\s+[v|V]\d(\.\d+){0,2}'
+            ```
+            ${{ steps.changelog.outputs.compareurl }}
+            ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
