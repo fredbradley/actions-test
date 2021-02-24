@@ -10,11 +10,6 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - uses: oprypin/find-latest-tag@v1
-        id: octokit  # The step ID to refer to later.
-        with:
-          repository: fredbradley/actions-test  # The repository to scan.
-
       - name: Checkout main branch to calculate changelog
         uses: actions/checkout@v2
         with:
@@ -60,7 +55,7 @@ jobs:
 
       - uses: fregante/release-with-changelog@v3
         with:
-          tag: ${{ steps.octokit.outputs.tag}}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-template: '- {title} ← {hash}'
           template: |
