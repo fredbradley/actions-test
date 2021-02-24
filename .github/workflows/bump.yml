@@ -52,17 +52,6 @@ jobs:
           create_annotated_tag: true
           tag_prefix: v
 
-      - name: Create a GitHub release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_SHA: ${{ steps.updated_sha.outputs.commit_id }}
-        with:
-          commitish: ${{ steps.updated_sha.outputs.commit_id }}
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
-
       - uses: fregante/release-with-changelog@v3
         with:
           tag: ${{ steps.tag_version.output.new_tag}}
