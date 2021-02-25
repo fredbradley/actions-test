@@ -2,5 +2,14 @@
 
 function test(string $string): string
 {
-    return 'this is a test';
+    return $string;
+}
+function testAgain(int $int): int
+{
+    return $int;
+}
+
+function isInt($var):bool
+{
+    return true;
 }
