@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
+
 jobs:
-  build:
+  Bump and Release:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
@@ -21,7 +19,7 @@ jobs:
         id: tag_version
         uses: miguelfito/github-bump-and-tag-action@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrmeanwhile last night ive ets.GITHUB_TOKEN }}
           default_bump: patch
           create_annotated_tag: true
           tag_prefix: v
