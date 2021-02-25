@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
+
 jobs:
-  build:
+  Bump and Release:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
