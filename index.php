@@ -8,3 +8,8 @@ function testAgain(int $int): int
 {
     return $int;
 }
+
+function isInt($var):bool
+{
+    return true;
+}
