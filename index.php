@@ -1,6 +1,6 @@
 <?php
 
-function test()
+function test(): string
 {
     return 'this is a test';
 }
