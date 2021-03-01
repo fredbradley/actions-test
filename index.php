@@ -9,6 +9,9 @@ function test(string $string): string
 {
     return $string;
 }
+function refactor(string $str) {
+    return 'thing';
+}
 
 /**
  * @param  int  $int
