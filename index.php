@@ -9,7 +9,9 @@ function test(string $string): string
 {
     return $string;
 }
-function refactor(string $str) {
+
+function refactor(string $str)
+{
     return 'thing';
 }
 
