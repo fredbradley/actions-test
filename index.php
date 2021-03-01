@@ -20,15 +20,4 @@ function testAgain(int $int): int
     return $int;
 }
 
-/**
- * @param $var
- *
- * @return bool
- */
-function isInt($var): bool
-{
-    if ($var instanceof int) {
-        return true;
-    }
-    return false;
-}
+
