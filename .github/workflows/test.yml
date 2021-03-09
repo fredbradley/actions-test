@@ -26,11 +26,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: patch
           create_annotated_tag: true
+          tag_prefix: v
           dry_run: true
       - name: WP Version SemVer Update
         uses: fredbradley/gh-action-wordpress-version-update@v1.0.3
         with:
-          version: ${{ steps.tag_version.outputs.new_tag }}
+          version: ${{ steps.tag_version.outputs.new_version }}
           file_path: 'style.css'
 
       - name: Auto Commit
