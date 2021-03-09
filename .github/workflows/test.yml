@@ -14,6 +14,11 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+
+      - run: npm install
+
       - name: Calculate version
         id: tag_version
         uses: miguelfito/github-bump-and-tag-action@v1
