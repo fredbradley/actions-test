@@ -37,5 +37,7 @@ jobs:
       - name: Auto Commit
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          tagging_message: ${{ steps.tag_version.outputs.new_tag }}
+          file_pattern: style.css
           commit_message: Apply version bump change
           push_options: --force
