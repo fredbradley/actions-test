@@ -1,0 +1,36 @@
+name: Bump version
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  myJob:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch to calculate changelog
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Calculate version
+        id: tag_version
+        uses: miguelfito/github-bump-and-tag-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+          create_annotated_tag: true
+          tag_prefix: v
+          dry_run: true
+      - name: WP Version SemVer Update
+        uses: fredbradley/gh-action-wordpress-version-update@v1.0.2
+        with:
+          version: ${{ steps.tag_version.outputs.new_tag }}
+          file_path: 'style.css'
+
+      - name: Auto Commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Apply version bump change
+          push_options: --force

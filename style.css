@@ -1,0 +1,19 @@
+/*!
+Theme Name: Cranleigh 2016
+Version: 5.4.7
+Theme URI: https://www.cranleigh.org
+Author: Karin Carruthers, Rikki Tripp & the Cranleigh dev team.
+Author URI: mailto:support@cranleigh.org
+Description: Custom theme for Cranleigh School in 2016.
+License: MIT
+License URI:
+Text Domain: cranleigh-2016
+
+_s is based on Underscores http://underscores.me/, (C) 2012-2016 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+
+This file is only here so the theme shows up in WP. The real styles are all in /sass
+
+*/
+
+/* At Cranleigh we never put anything in out style.css We rely heavily on child and parent themes and have our own file/folder structure */
