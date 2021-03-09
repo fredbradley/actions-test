@@ -29,7 +29,7 @@ jobs:
           tag_prefix: v
           dry_run: true
       - name: WP Version SemVer Update
-        uses: fredbradley/gh-action-wordpress-version-update@1.0.3
+        uses: fredbradley/gh-action-wordpress-version-update@v1.0.3
         with:
           version: ${{ steps.tag_version.outputs.new_tag }}
           file_path: 'style.css'
